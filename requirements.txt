@@ -1,0 +1,15 @@
+attrs==17.4.0
+Django==1.11.12
+django-classy-tags==0.8.0
+django-cms==3.5.2
+django-formtools==2.1
+django-sekizai==0.10.0
+django-treebeard==4.3
+djangocms-admin-style==1.2.8
+more-itertools==4.1.0
+pluggy==0.6.0
+py==1.5.3
+pytest==3.5.1
+pytest-django==3.2.1
+pytz==2018.4
+six==1.11.0
