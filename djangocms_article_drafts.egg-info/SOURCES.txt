@@ -1,0 +1,15 @@
+MANIFEST.in
+README.rst
+djangocms_article_drafts/__init__.py
+djangocms_article_drafts/admin.py
+djangocms_article_drafts/apps.py
+djangocms_article_drafts/mixins.py
+djangocms_article_drafts/models.py
+djangocms_article_drafts/tests.py
+djangocms_article_drafts/views.py
+djangocms_article_drafts.egg-info/PKG-INFO
+djangocms_article_drafts.egg-info/SOURCES.txt
+djangocms_article_drafts.egg-info/dependency_links.txt
+djangocms_article_drafts.egg-info/requires.txt
+djangocms_article_drafts.egg-info/top_level.txt
+djangocms_article_drafts/migrations/__init__.py
