@@ -1,3 +1,5 @@
+*.egg-info
 .idea/
 .venv/
-.pytest*
+*pytest*
+__pycache__/
