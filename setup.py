@@ -5,6 +5,7 @@ import djangocms_article_drafts
 INSTALL_REQUIREMENTS = [
     'Django>=1.8,<2.0',
     'django-cms>=3.4.2',
+    'djangocms_helper',
 ]
 
 setup(
