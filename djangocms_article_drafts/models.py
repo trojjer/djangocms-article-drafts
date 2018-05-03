@@ -17,7 +17,7 @@ class BasePublishable(models.Model):
         if not self.publisher_is_draft:
             raise PublicIsUnmodifiable('The public instance cannot be published. Use draft.')
 
-        return None
+        return True
 
 
 class Article(BasePublishable):
