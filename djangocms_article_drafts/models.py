@@ -36,20 +36,22 @@ class PublishPool(object):
         # Publish can only be called on draft pages
         if not model_instance.is_draft:
             raise PublicIsUnmodifiable('The public instance cannot be published. Use draft.')
-
         return True
+        
+    def __contains__(self, model_class):
+        return model_class in publishable_pool.model_pool.values()
     
     
 @receiver(post_publish, dispatch_uid='publishable_post_publish')
 def publish_receiver(sender, **kwargs):
     # check for known publishable models
-    if sender in publishable_pool.model_pool.values():
+    if sender in publishable_pool:
         publishable_pool.publish(sender)
     # e.g. model.save()
     
 @receiver(post_save, dispatch_uid="publishable_post_save")
 def save_receiver(sender, **kwargs):
-    if sender in publishable_pool.model_pool.values():
+    if sender in publishable_pool:
         if kwargs['created']: 
             # import pdb; pdb.set_trace()
             Publishable.objects.create(content_object=kwargs['instance'])
