@@ -11,14 +11,18 @@ from djangocms_article_drafts.test_project.models import ArticleTest
 
 class GenericPublishingTestCase(TestCase):
 
-	def test_pool_attribute(self):
-		self.assertEquals(publishable_pool.model_pool, {})
-	
-	def test_register(self):
-		publishable_pool.register(ArticleTest)
+    def test_pool_attribute(self):
+        self.assertEquals(publishable_pool.model_pool, {})
+    
+    def test_register(self):
+        self.assertEquals(publishable_pool.model_pool, {})
+        publishable_pool.register(ArticleTest)
+        self.assertEquals(publishable_pool.model_pool, {ArticleTest.__name__: ArticleTest})
 
+    
+    
 
-	#todo: refactor for pool
+    #todo: refactor for pool
     # def test_exception_if_article_is_draft(self):
     #     public_article = Article.objects.create(publisher_is_draft=False)
 

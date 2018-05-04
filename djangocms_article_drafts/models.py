@@ -11,10 +11,9 @@ class BasePublishable(models.Model):
     def __init__(self):
         self.model_pool = {}
     
-    def register(self, model_class_name):
-        # todo: model_pool[model_class_name] = model_class_name()
+    def register(self, model_class):
         # todo: check that the model has certain required attributes e.g. publisher_is_draft
-        pass
+        self.model_pool[model_class.__name__] = model_class
 
     def publish(self, language):
         # Publish can only be called on draft pages
