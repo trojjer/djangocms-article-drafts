@@ -8,47 +8,48 @@ from django.contrib.contenttypes.models import ContentType
 from cms.exceptions import PublicIsUnmodifiable
 from cms.signals import post_publish
 
-from djangocms_article_drafts.models import Publishable, publishable_pool
+from djangocms_article_drafts.models import Publishable, PublishPool, publishable_pool
 from djangocms_article_drafts.test_project.models import ArticleTest
 
-class GenericPublishingTestCase(TestCase):
 
-    def test_pool_attribute(self):
+class GenericPublishingTestCase(TestCase):
+    
+    def setUp(self):
+        publishable_pool.clear()
+        Publishable.objects.all().delete()
+        publishable_pool.register(ArticleTest)
+
+    def test_pool_clear(self):
+        publishable_pool.clear()
         self.assertEquals(publishable_pool.model_pool, {})
     
     def test_register(self):
-        self.assertEquals(publishable_pool.model_pool, {})
-        publishable_pool.register(ArticleTest)
-        self.assertEquals(publishable_pool.model_pool, {ArticleTest.__name__: ArticleTest})
+        publishable_pool_new = PublishPool()
+        self.assertEquals(publishable_pool_new.model_pool, {})
+        publishable_pool_new.register(ArticleTest)
+        self.assertEquals(publishable_pool_new.model_pool, {ArticleTest.__name__: ArticleTest})
 
-    # def test_publish_signal(self):
-    #     post_publish.send(ArticleTest.objects.create())
-
-    # def test_publish_signal_unregistered_model(self):
-    #     post_publish.send(object())
-    
-    def test_save_signal_creates_new_publishable(self):
-        # article = ArticleTest.objects.create()
-        # import pdb; pdb.set_trace()
-        # publishable_type = ContentType.objects.get(app_label="djangocms_article_drafts", model="publishable")
+    def test_save_signal_creates_new_publishable_instance(self):
         article = ArticleTest()
         article.save()
-        # post_save.send(ArticleTest, instance=article, created=True)
-        self.assertEquals(Publishable.objects.count(), 1)
-        
+        self.assertEquals(Publishable.objects.count(), 1)        
         publishable = Publishable.objects.first()
         self.assertEquals(publishable.object_id, article.id)
 
-    #todo: refactor for pool
-    # def test_exception_if_article_is_draft(self):
-    #     public_article = Article.objects.create(publisher_is_draft=False)
+    def test_publish_signal_flags_as_published(self):
+        article = ArticleTest()
+        article.save()
+        post_publish.send(ArticleTest, instance=article)
+        publishable = Publishable.objects.get(object_id=article.id)
+        self.assertFalse(publishable.is_draft)
+        
+    def test_exception_if_article_is_published(self):
+        article = ArticleTest()
+        article.save()
+        post_publish.send(ArticleTest, instance=article)
+        
+        with self.assertRaises(PublicIsUnmodifiable):
+            post_publish.send(ArticleTest, instance=article)
 
-    #     with self.assertRaises(PublicIsUnmodifiable):
-    #         public_article.publish('en')
-
-    # def test_article_publish(self):
-    #     draft_article = Article.objects.create(publisher_is_draft=True)
-
-    #     is_published = draft_article.publish('en')
-
-    #     self.assertTrue(is_published)
+    def test_cannot_publish_unregistered_model(self):
+        post_publish.send(object()
