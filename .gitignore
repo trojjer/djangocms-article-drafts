@@ -3,3 +3,5 @@
 .venv/
 *pytest*
 __pycache__/
+build/
+dist/
