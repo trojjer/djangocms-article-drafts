@@ -1,15 +1,13 @@
-from unittest.mock import MagicMock, patch
+from unittest.mock import MagicMock
 
-from django.db import models
-from django.db.models.signals import post_save
 from django.test import TestCase
-from django.contrib.contenttypes.models import ContentType
 
 from cms.exceptions import PublicIsUnmodifiable
 from cms.signals import post_publish
 
 from djangocms_article_drafts.models import Publishable, PublishPool, publishable_pool
-from djangocms_article_drafts.test_project.models import ArticleTest
+from djangocms_article_drafts.test_project.models import ArticleTest, UnregisteredModel
+from djangocms_article_drafts.exceptions import UnregisteredModelError
 
 
 class GenericPublishingTestCase(TestCase):
@@ -51,5 +49,8 @@ class GenericPublishingTestCase(TestCase):
         with self.assertRaises(PublicIsUnmodifiable):
             post_publish.send(ArticleTest, instance=article)
 
-    def test_cannot_publish_unregistered_model(self):
-        post_publish.send(object()
+    def test_cannot_publish_unregistered_model_class(self):
+        unregistered_model = UnregisteredModel()
+        post_publish.send(UnregisteredModel, instance=unregistered_model)
+
+        self.assertEquals(Publishable.objects.count(), 0)

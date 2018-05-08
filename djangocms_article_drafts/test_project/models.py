@@ -2,8 +2,8 @@ from django.db import models
 
 
 class ArticleTest(models.Model):
-	pass
+    pass
 
 
-class Unpublishable(models.Model):
-	pass
+class UnregisteredModel(models.Model):
+    pass
