@@ -32,14 +32,22 @@ class GenericPublishingTestCase(TestCase):
         article.save()
         self.assertEquals(Publishable.objects.count(), 1)        
         publishable = Publishable.objects.first()
-        self.assertEquals(publishable.object_id, article.id)
+        self.assertEquals(publishable.draft_object_id, article.id)
 
     def test_publish_signal_flags_as_published(self):
         article = ArticleTest()
         article.save()
         post_publish.send(ArticleTest, instance=article)
-        publishable = Publishable.objects.get(object_id=article.id)
+        publishable = Publishable.objects.get(draft_object_id=article.id)
         self.assertFalse(publishable.is_draft)
+        
+    def test_publish_signal_assigned_publshed_object_id(self):
+        article = ArticleTest()
+        article.save()
+        post_publish.send(ArticleTest, instance=article)
+        publishable = Publishable.objects.get(draft_object_id=article.id)
+        published_article = ArticleTest.objects.last()
+        self.assertEquals(publishable.published_object_id, published_article.id)
         
     def test_exception_if_article_is_published(self):
         article = ArticleTest()
