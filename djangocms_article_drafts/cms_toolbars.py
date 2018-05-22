@@ -2,6 +2,8 @@
 
 from django.utils.translation import override as force_language, ugettext_lazy as _
 
+import importlib
+
 
 # from cms.api import get_page_draft  # @todo: publisher needs its own version of this
 
@@ -27,11 +29,11 @@ from aldryn_newsblog.models import Article
 from .models import publishable_pool
 
 
-@toolbar_pool.register
-class PublisherToolbar(CMSToolbar):
 
-    watch_models = [Article]
-    supported_apps = ['aldryn_newsblog']
+class PublisherToolbar(CMSToolbar):
+    #
+    # watch_models = [Article]
+    # supported_apps = ['aldryn_newsblog']
 
     def populate(self):
         print('populate')
@@ -71,15 +73,25 @@ class PublisherToolbar(CMSToolbar):
         )
         self.toolbar.add_item(item)
 
+# should_register = False
+# print('yo')
+# print(toolbar_pool.toolbars.values())
+# for toolbar in toolbar_pool.toolbars.values():
+#     print('toolbar')
+#     print(toolbar)
+#     print('publishable list')
+#     print(publishable_pool.model_pool.values())
+#     for ContentModel in publishable_pool.model_pool.values():
+#         print('ContentModel')
+#         print(ContentModel)
+#         watch_models = getattr(toolbar, 'watch_models', None)
+#         if watch_models and ContentModel.__name__ in watch_models:
+#             print('found ContentModel')
+#             toolbar_pool.unregister(toolbar)
 
-for toolbar in toolbar_pool.toolbars.values():
-    print('toolbar')
-    print(toolbar)
-    print('publishable list')
-    print(publishable_pool.model_pool.values())
-    for item in publishable_pool.model_pool.values():
-        print('item')
-        print(item)
-        if item.__class__.__name__ in toolbar.watch_models:
-            print('found item')
-            toolbar_pool.unregister(toolbar)
+toolbars = [t for t in toolbar_pool.toolbars.values()]
+for toolbar in toolbars:
+    # toolbar_pool.unregister(toolbar)
+    pass
+
+toolbar_pool.register(PublisherToolbar)

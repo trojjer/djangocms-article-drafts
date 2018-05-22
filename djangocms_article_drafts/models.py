@@ -6,6 +6,7 @@ from django.contrib.contenttypes.fields import GenericForeignKey
 
 from cms.exceptions import PublicIsUnmodifiable
 from cms.signals import post_publish
+import importlib
 
 
 class Publishable(models.Model):
@@ -47,12 +48,13 @@ class PublishPool(object):
     def clear(self):
         self.model_pool = {}
 
-    def register(self, model_class):
+    def register(self, model_path):
         """ todo: check that the model has certain
         required attributes e.g. publisher_is_draft"""
-        print('registering model with publishable')
-        print(model_class)
-        self.model_pool[model_class.__name__] = model_class
+        model_module_path, model_name = model_path
+        model_module = importlib.import_module(model_module_path)
+        ContentModel = getattr(model_module, model_name)
+        self.model_pool[model_name] = ContentModel
 
     def publish(self, model_instance):
         # Publish can only be called on draft pages
