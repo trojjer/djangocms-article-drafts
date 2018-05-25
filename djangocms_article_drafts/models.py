@@ -56,6 +56,12 @@ class PublishPool(object):
         ContentModel = getattr(model_module, model_name)
         self.model_pool[model_name] = ContentModel
 
+    def get_published_record(self):
+        pass
+
+    def get_draft_record(self):
+        pass
+
     def publish(self, model_instance):
         # Publish can only be called on draft pages
         publishable = Publishable.objects.get(
