@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from django.utils.translation import override as force_language, ugettext_lazy as _
 
 import importlib
