@@ -15,7 +15,7 @@ class GenericPublishingTestCase(TestCase):
     def setUp(self):
         publishable_pool.clear()
         Publishable.objects.all().delete()
-        publishable_pool.register(ArticleTest)
+        publishable_pool.register(ArticleTest.__module__, ArticleTest.__name__)
 
     def test_pool_clear(self):
         publishable_pool.clear()
@@ -24,7 +24,7 @@ class GenericPublishingTestCase(TestCase):
     def test_register(self):
         publishable_pool_new = PublishPool()
         self.assertEquals(publishable_pool_new.model_pool, {})
-        publishable_pool_new.register(ArticleTest)
+        publishable_pool_new.register(ArticleTest.__module__, ArticleTest.__name__)
         self.assertEquals(publishable_pool_new.model_pool, {ArticleTest.__name__: ArticleTest})
 
     def test_save_signal_creates_new_publishable_instance(self):

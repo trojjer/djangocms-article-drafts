@@ -48,12 +48,16 @@ class PublishPool(object):
     def clear(self):
         self.model_pool = {}
 
-    def register(self, model_path):
-        """ todo: check that the model has certain
-        required attributes e.g. publisher_is_draft"""
-        model_module_path, model_name = model_path
-        model_module = importlib.import_module(model_module_path)
+    def register(self, model_module, model_name):
+        """
+        TODO: check that the model has certain
+        required attributes e.g. publisher_is_draft
+        """
+        model_module = importlib.import_module(model_module, model_name)
         ContentModel = getattr(model_module, model_name)
+        assert ContentModel.__name__ == model_name, (
+            'ContentModel not imported correctly. Expected {} class, found {}.'.format(
+                model_name, ContentModel))
         self.model_pool[model_name] = ContentModel
 
     def get_published_record(self):
