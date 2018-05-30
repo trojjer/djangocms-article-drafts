@@ -49,7 +49,10 @@ We need to install the `djangocms` and then add this repository as a dependency:
 
 13. `python manage.py migrate`
 
-14. `python manage.py test djangocms_article_drafts`
+14. Running tests - you can do this straight from your `~/workspace/djangocms-article-drafts/`
+directory by running 
+
+`python setup.py test`
 
 Now you can make changes to your local `~/workspace/djangocms-article-drafts/`
 repository and changes will be reflected in your `testproject`.
