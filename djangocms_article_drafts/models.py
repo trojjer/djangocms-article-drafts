@@ -13,15 +13,18 @@ class Publishable(models.Model):
     """Abstract model to represent a publishable CMS node e.g. Page, Article.
     """
 
-    # @todo: do we need both content_type foreignKeys?
-    #
     content_type = models.ForeignKey(ContentType)
     draft_object_id = models.PositiveIntegerField()
     published_object_id = models.PositiveIntegerField(null=True)
+
     draft_object = GenericForeignKey('content_type', 'draft_object_id')
     published_object = GenericForeignKey('content_type', 'published_object_id')
+
     is_draft = models.BooleanField(default=True)
     is_published = models.BooleanField(default=False)
+    # Publishable can be hidden on the frontend, but still published,
+    # `is_visible` is the flag used for this scenario
+    is_visible = models.BooleanField(default=False)
 
     """ draft_object_id @todo: track the draft
     to which a published record relates """
