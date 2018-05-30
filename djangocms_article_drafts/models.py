@@ -21,6 +21,7 @@ class Publishable(models.Model):
     draft_object = GenericForeignKey('content_type', 'draft_object_id')
     published_object = GenericForeignKey('content_type', 'published_object_id')
     is_draft = models.BooleanField(default=True)
+    is_published = models.BooleanField(default=False)
 
     """ draft_object_id @todo: track the draft
     to which a published record relates """
