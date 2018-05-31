@@ -22,10 +22,8 @@ from cms.utils.urlutils import admin_reverse
 
 # @todo: refactor as generic rather than Article
 from cms.cms_toolbars import PageToolbar
-from aldryn_newsblog.models import Article
 
 from .models import publishable_pool
-
 
 
 class PublisherToolbar(CMSToolbar):
