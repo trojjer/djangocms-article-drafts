@@ -1,5 +1,3 @@
-from unittest.mock import MagicMock
-
 from django.test import TestCase
 
 from cms.exceptions import PublicIsUnmodifiable
@@ -7,11 +5,9 @@ from cms.signals import post_publish
 
 from djangocms_article_drafts.models import Publishable, PublishPool, publishable_pool
 from djangocms_article_drafts.test_project.models import ArticleTest, UnregisteredModel
-from djangocms_article_drafts.exceptions import UnregisteredModelError
 
 
 class GenericPublishingTestCase(TestCase):
-    
     def setUp(self):
         publishable_pool.clear()
         Publishable.objects.all().delete()
